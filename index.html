@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Security System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo" data-lang="en">IoT Security System</a>
+                <a href="#" class="logo" data-lang="ar" style="display: none;">نظام أمان إنترنت الأشياء</a>
+                <nav id="mainNav" style="display: none;">
+                    <ul class="nav-menu">
+                        <li><a href="#" id="dashboardLink" data-lang="en">Dashboard</a></li>
+                        <li><a href="#" id="dashboardLink" data-lang="ar" style="display: none;">الرئيسية</a></li>
+                        <li><a href="#" id="telemetryLink" data-lang="en">Send Data</a></li>
+                        <li><a href="#" id="telemetryLink" data-lang="ar" style="display: none;">إرسال البيانات</a></li>
+                    </ul>
+                </nav>
+                <div class="settings-menu">
+                    <button id="darkModeToggle" class="btn-icon">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="languageToggle" class="btn-icon">
+                        <span id="currentLang">EN</span>
+                    </button>
+                </div>
+                <div class="user-menu">
+                    <div id="loggedOutMenu">
+                        <button id="loginBtn" class="btn btn-primary" data-lang="en">Login</button>
+                        <button id="loginBtn" class="btn btn-primary" data-lang="ar" style="display: none;">تسجيل الدخول</button>
+                        <button id="registerBtn" class="btn btn-secondary" data-lang="en">Register</button>
+                        <button id="registerBtn" class="btn btn-secondary" data-lang="ar" style="display: none;">إنشاء حساب</button>
+                    </div>
+                    <div id="loggedInMenu" style="display: none;">
+                        <span id="userDisplayName" style="margin-left: 10px;"></span>
+                        <button id="logoutBtn" class="btn btn-secondary" data-lang="en">Logout</button>
+                        <button id="logoutBtn" class="btn btn-secondary" data-lang="ar" style="display: none;">تسجيل الخروج</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Authentication Pages -->
+            <div id="authPages">
+                <!-- Login Page -->
+                <div id="loginPage" class="auth-page active">
+                    <div class="auth-container">
+                        <h2 data-lang="en">Login</h2>
+                        <h2 data-lang="ar" style="display: none;">تسجيل الدخول</h2>
+                        <form id="loginForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="loginEmail" data-lang="en">Email</label>
+                                <label for="loginEmail" data-lang="ar" style="display: none;">البريد الإلكتروني</label>
+                                <input type="email" id="loginEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword" data-lang="en">Password</label>
+                                <label for="loginPassword" data-lang="ar" style="display: none;">كلمة المرور</label>
+                                <div class="password-input">
+                                    <input type="password" id="loginPassword" required>
+                                    <button type="button" class="toggle-password" id="toggleLoginPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="en">Login</button>
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="ar" style="display: none;">تسجيل الدخول</button>
+                            </div>
+                            <div class="form-footer">
+                                <a href="#" id="forgotPasswordLink" data-lang="en">Forgot password?</a>
+                                <a href="#" id="forgotPasswordLink" data-lang="ar" style="display: none;">نسيت كلمة المرور؟</a>
+                            </div>
+                        </form>
+                        <div class="auth-switch">
+                            <span data-lang="en">Don't have an account?</span>
+                            <span data-lang="ar" style="display: none;">ليس لديك حساب؟</span>
+                            <a href="#" id="goToRegisterLink" data-lang="en">Create new account</a>
+                            <a href="#" id="goToRegisterLink" data-lang="ar" style="display: none;">إنشاء حساب جديد</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verification Code Page -->
+                <div id="verifyCodePage" class="auth-page">
+                    <div class="auth-container">
+                        <h2 data-lang="en">Verification Code</h2>
+                        <h2 data-lang="ar" style="display: none;">التحقق من الرمز</h2>
+                        <p style="text-align: center; margin-bottom: 20px;" data-lang="en">A verification code has been sent to your email</p>
+                        <p style="text-align: center; margin-bottom: 20px;" data-lang="ar" style="display: none;">تم إرسال رمز التحقق إلى بريدك الإلكتروني</p>
+                        <form id="verifyCodeForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="verificationCode" data-lang="en">Verification Code</label>
+                                <label for="verificationCode" data-lang="ar" style="display: none;">رمز التحقق</label>
+                                <input type="text" id="verificationCode" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="en">Verify</button>
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="ar" style="display: none;">تحقق</button>
+                            </div>
+                            <div class="form-footer">
+                                <span id="codeExpiryTimer" data-lang="en">Expires in: 05:00</span>
+                                <span id="codeExpiryTimer" data-lang="ar" style="display: none;">ينتهي في: 05:00</span>
+                            </div>
+                        </form>
+                        <div class="auth-switch">
+                            <a href="#" id="resendCodeLink" data-lang="en">Resend code</a>
+                            <a href="#" id="resendCodeLink" data-lang="ar" style="display: none;">إعادة إرسال الرمز</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Register Page -->
+                <div id="registerPage" class="auth-page">
+                    <div class="auth-container">
+                        <h2 data-lang="en">Create New Account</h2>
+                        <h2 data-lang="ar" style="display: none;">إنشاء حساب جديد</h2>
+                        <form id="registerForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="registerName" data-lang="en">Name</label>
+                                <label for="registerName" data-lang="ar" style="display: none;">الاسم</label>
+                                <input type="text" id="registerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerEmail" data-lang="en">Email</label>
+                                <label for="registerEmail" data-lang="ar" style="display: none;">البريد الإلكتروني</label>
+                                <input type="email" id="registerEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerPhone" data-lang="en">Phone Number</label>
+                                <label for="registerPhone" data-lang="ar" style="display: none;">رقم الهاتف</label>
+                                <input type="tel" id="registerPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerPassword" data-lang="en">Password</label>
+                                <label for="registerPassword" data-lang="ar" style="display: none;">كلمة المرور</label>
+                                <div class="password-input">
+                                    <input type="password" id="registerPassword" required>
+                                    <button type="button" class="toggle-password" id="toggleRegisterPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="deviceId" data-lang="en">Device ID</label>
+                                <label for="deviceId" data-lang="ar" style="display: none;">معرف الجهاز</label>
+                                <input type="text" id="deviceId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="deviceAccessToken" data-lang="en">Device Access Token</label>
+                                <label for="deviceAccessToken" data-lang="ar" style="display: none;">رمز الوصول للجهاز</label>
+                                <input type="text" id="deviceAccessToken" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="en">Register</button>
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="ar" style="display: none;">إنشاء حساب</button>
+                            </div>
+                        </form>
+                        <div class="auth-switch">
+                            <span data-lang="en">Already have an account?</span>
+                            <span data-lang="ar" style="display: none;">لديك حساب بالفعل؟</span>
+                            <a href="#" id="goToLoginLink" data-lang="en">Login</a>
+                            <a href="#" id="goToLoginLink" data-lang="ar" style="display: none;">تسجيل الدخول</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Verification Page -->
+                <div id="emailVerificationPage" class="auth-page">
+                    <div class="auth-container">
+                        <h2 data-lang="en">Email Verification</h2>
+                        <h2 data-lang="ar" style="display: none;">تفعيل البريد الإلكتروني</h2>
+                        <p style="text-align: center; margin-bottom: 20px;" data-lang="en">An activation code has been sent to your email</p>
+                        <p style="text-align: center; margin-bottom: 20px;" data-lang="ar" style="display: none;">تم إرسال رمز التفعيل إلى بريدك الإلكتروني</p>
+                        <form id="emailVerificationForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="activationCode" data-lang="en">Activation Code</label>
+                                <label for="activationCode" data-lang="ar" style="display: none;">رمز التفعيل</label>
+                                <input type="text" id="activationCode" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="en">Activate</button>
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="ar" style="display: none;">تفعيل</button>
+                            </div>
+                            <div class="form-footer">
+                                <span id="activationExpiryTimer" data-lang="en">Expires in: 05:00</span>
+                                <span id="activationExpiryTimer" data-lang="ar" style="display: none;">ينتهي في: 05:00</span>
+                            </div>
+                        </form>
+                        <div class="auth-switch">
+                            <a href="#" id="resendActivationLink" data-lang="en">Resend activation code</a>
+                            <a href="#" id="resendActivationLink" data-lang="ar" style="display: none;">إعادة إرسال رمز التفعيل</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Forgot Password Page -->
+                <div id="forgotPasswordPage" class="auth-page">
+                    <div class="auth-container">
+                        <h2 data-lang="en">Reset Password</h2>
+                        <h2 data-lang="ar" style="display: none;">استعادة كلمة المرور</h2>
+                        <form id="forgotPasswordForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="forgotEmail" data-lang="en">Email</label>
+                                <label for="forgotEmail" data-lang="ar" style="display: none;">البريد الإلكتروني</label>
+                                <input type="email" id="forgotEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="en">Send Reset Code</button>
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="ar" style="display: none;">إرسال رمز الاستعادة</button>
+                            </div>
+                        </form>
+                        <div class="auth-switch">
+                            <a href="#" id="backToLoginLink" data-lang="en">Back to Login</a>
+                            <a href="#" id="backToLoginLink" data-lang="ar" style="display: none;">العودة إلى تسجيل الدخول</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Code Verification Page -->
+                <div id="resetCodePage" class="auth-page">
+                    <div class="auth-container">
+                        <h2 data-lang="en">Verify Reset Code</h2>
+                        <h2 data-lang="ar" style="display: none;">التحقق من رمز الاستعادة</h2>
+                        <p style="text-align: center; margin-bottom: 20px;" data-lang="en">A reset code has been sent to your email</p>
+                        <p style="text-align: center; margin-bottom: 20px;" data-lang="ar" style="display: none;">تم إرسال رمز الاستعادة إلى بريدك الإلكتروني</p>
+                        <form id="resetCodeForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="resetCode" data-lang="en">Reset Code</label>
+                                <label for="resetCode" data-lang="ar" style="display: none;">رمز الاستعادة</label>
+                                <input type="text" id="resetCode" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="en">Verify</button>
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="ar" style="display: none;">تحقق</button>
+                            </div>
+                            <div class="form-footer">
+                                <span id="resetExpiryTimer" data-lang="en">Expires in: 05:00</span>
+                                <span id="resetExpiryTimer" data-lang="ar" style="display: none;">ينتهي في: 05:00</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Reset Password Page -->
+                <div id="resetPasswordPage" class="auth-page">
+                    <div class="auth-container">
+                        <h2 data-lang="en">Set New Password</h2>
+                        <h2 data-lang="ar" style="display: none;">تعيين كلمة مرور جديدة</h2>
+                        <form id="resetPasswordForm" class="auth-form">
+                            <div class="form-group">
+                                <label for="newPassword" data-lang="en">New Password</label>
+                                <label for="newPassword" data-lang="ar" style="display: none;">كلمة المرور الجديدة</label>
+                                <div class="password-input">
+                                    <input type="password" id="newPassword" required>
+                                    <button type="button" class="toggle-password" id="toggleNewPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmNewPassword" data-lang="en">Confirm New Password</label>
+                                <label for="confirmNewPassword" data-lang="ar" style="display: none;">تأكيد كلمة المرور الجديدة</label>
+                                <div class="password-input">
+                                    <input type="password" id="confirmNewPassword" required>
+                                    <button type="button" class="toggle-password" id="toggleConfirmPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="en">Set Password</button>
+                                <button type="submit" class="btn btn-primary btn-block" data-lang="ar" style="display: none;">تعيين كلمة المرور</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Pages (visible after login) -->
+            <div id="mainPages" style="display: none;">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page active">
+                    <h2 class="page-title" data-lang="en">Dashboard</h2>
+                    <h2 class="page-title" data-lang="ar" style="display: none;">لوحة التحكم</h2>
+                    <div class="telemetry-data">
+                        <div class="telemetry-card">
+                            <h3 data-lang="en">Current Temperature</h3>
+                            <h3 data-lang="ar" style="display: none;">درجة الحرارة الحالية</h3>
+                            <div class="value" id="currentTemperature">--</div>
+                            <div class="unit">°C</div>
+                        </div>
+                        <div class="telemetry-card">
+                            <h3 data-lang="en">Current Humidity</h3>
+                            <h3 data-lang="ar" style="display: none;">الرطوبة الحالية</h3>
+                            <div class="value" id="currentHumidity">--</div>
+                            <div class="unit">%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telemetry Page -->
+                <div id="telemetryPage" class="page">
+                    <h2 class="page-title" data-lang="en">Send Telemetry Data</h2>
+                    <h2 class="page-title" data-lang="ar" style="display: none;">إرسال بيانات القياس</h2>
+                    <div class="telemetry-container">
+                        <form id="telemetryForm" class="telemetry-form">
+                            <div class="form-group">
+                                <label for="temperature" data-lang="en">Temperature (°C)</label>
+                                <label for="temperature" data-lang="ar" style="display: none;">درجة الحرارة (°C)</label>
+                                <input type="number" id="temperature" step="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="humidity" data-lang="en">Humidity (%)</label>
+                                <label for="humidity" data-lang="ar" style="display: none;">الرطوبة (%)</label>
+                                <input type="number" id="humidity" step="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" data-lang="en">Send Data</button>
+                                <button type="submit" class="btn btn-primary" data-lang="ar" style="display: none;">إرسال البيانات</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/telemetry.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
