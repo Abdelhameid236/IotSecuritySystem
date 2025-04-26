@@ -4,7 +4,7 @@
  */
 
 // Base API URL
-const API_BASE_URL = 'https://5100-196-130-217-67.ngrok-free.app/api';
+const API_BASE_URL = 'https://iotsecuritysystem.runasp.net/api';
 
 // API endpoints
 const ENDPOINTS = {
