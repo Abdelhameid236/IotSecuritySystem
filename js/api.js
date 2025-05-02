@@ -147,6 +147,13 @@ const api = {
   
   // Send telemetry data
   sendTelemetry: async (temperature, humidity) => {
-    return apiRequest(ENDPOINTS.telemetry.send, 'POST', { temperature, humidity }, true);
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const email = userData?.email;
+  
+    return apiRequest(ENDPOINTS.telemetry.send, 'POST', {
+      temperature,
+      humidity,
+      email // أضف الإيميل هنا
+    }, true);
   }
 };
