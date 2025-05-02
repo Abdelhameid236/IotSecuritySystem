@@ -144,16 +144,17 @@ const api = {
   resetPassword: async (email, newPassword) => {
     return apiRequest(ENDPOINTS.auth.resetPassword, 'POST', { email, newPassword });
   },
-  
-  // Send telemetry data
   sendTelemetry: async (temperature, humidity) => {
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const email = userData?.email;
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const userEmail = userData?.email;
   
-    return apiRequest(ENDPOINTS.telemetry.send, 'POST', {
-      temperature,
-      humidity,
-      email // أضف الإيميل هنا
-    }, true);
+    console.log(userData)
+    console.log(userEmail)
+    return apiRequest(
+      ENDPOINTS.telemetry.send,
+      'POST',
+      { userEmail, temperature, humidity },
+      true
+    );
   }
 };
